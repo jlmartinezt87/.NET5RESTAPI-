@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Catalog.Dtos;
 using Catalog.Entities;
 using Catalog.Repositories;
-using Catalogs.Dtos;
 using Microsoft.AspNetCore.Mvc;
-
-namespace Catalog.Controllers
+namespace Catalog.Controller
 {
-
     [ApiController]
     [Route("items")]
     public class ItemsController : ControllerBase
@@ -51,14 +49,14 @@ namespace Catalog.Controllers
                 Id = Guid.NewGuid(),
                 Name = itemDto.Name,
                 Price = itemDto.Price,
-                CreateDate = DateTimeOffset.UtcNow
+                CreateDate = DateTime.UtcNow
             };
 
             repository.CreateItem(item);
             return CreatedAtAction(nameof(GetItem), new { id = item.Id }, item.AsDto());
         }
 
-        // PUT /items/{id}
+        //PUT /items/{id}
         [HttpPut("{id}")]
         public ActionResult UpdateItem(Guid id, UpdateItemDto itemDto)
         {
@@ -69,12 +67,10 @@ namespace Catalog.Controllers
                 return NotFound();
             }
 
-            Item updatedItem = new Item()
+            Item updateItem = existingItem with
             {
-                Id = existingItem.Id,
                 Name = itemDto.Name,
-                Price = itemDto.Price,
-                CreateDate = existingItem.CreateDate
+                Price = itemDto.Price
             };
 
             //     // Item updatedItem = existingItem with
@@ -82,15 +78,13 @@ namespace Catalog.Controllers
             //     //     Name = itemDto.Name,
             //     //     Price = itemDto.Price
             //     // };
-
-            repository.UpdateItem(updatedItem);
-
+            
+            repository.UpdateItem(updateItem);
             return NoContent();
         }
 
-        
         //DELETE /items/{id}
-        [HttpDelete("{id}")]
+        [HttpDelete]
         public ActionResult DeleteItem(Guid id)
         {
             var existingItem = repository.GetItem(id);
@@ -101,7 +95,6 @@ namespace Catalog.Controllers
             }
 
             repository.DeleteItem(id);
-
             return NoContent();
         }
 
