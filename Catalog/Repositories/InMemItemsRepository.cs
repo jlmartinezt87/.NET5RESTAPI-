@@ -7,11 +7,12 @@ namespace Catalog.Repositories
 {
     public class InMemItemsRepository : IItemsRepository
     {
+
         private readonly List<Item> items = new()
         {
-            new Item { Id = Guid.NewGuid(), Name = "Potion", Price = 9, CreateDate = DateTimeOffset.UtcNow },
-            new Item { Id = Guid.NewGuid(), Name = "Iron Sword", Price = 20, CreateDate = DateTimeOffset.UtcNow },
-            new Item { Id = Guid.NewGuid(), Name = "Bronze Shield", Price = 18, CreateDate = DateTimeOffset.UtcNow }
+            new Item { Id = Guid.NewGuid(), Name = "Potion", Price = 9, CreateDate = System.DateTime.UtcNow },
+            new Item { Id = Guid.NewGuid(), Name = "Iron Sword", Price = 20, CreateDate = System.DateTime.UtcNow },
+            new Item { Id = Guid.NewGuid(), Name = "Bronce shield", Price = 18, CreateDate = System.DateTime.UtcNow }
         };
 
         public IEnumerable<Item> GetItems()
@@ -34,12 +35,10 @@ namespace Catalog.Repositories
             var index = items.FindIndex(existingItem => existingItem.Id == item.Id);
             items[index] = item;
         }
-
         public void DeleteItem(Guid id)
-        {
+        { 
             var index = items.FindIndex(existingItem => existingItem.Id == id);
             items.RemoveAt(index);
         }
     }
-
 }
