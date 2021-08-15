@@ -84,7 +84,7 @@ namespace Catalog.Controller
         }
 
         //DELETE /items/{id}
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public ActionResult DeleteItem(Guid id)
         {
             var existingItem = repository.GetItem(id);
