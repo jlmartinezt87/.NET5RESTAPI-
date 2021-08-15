@@ -34,16 +34,19 @@ namespace Catalog
         {
             BsonSerializer.RegisterSerializer(new GuidSerializer(BsonType.String));
             BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(BsonType.String));
-            
-            services.AddSingleton<IMongoClient>(servicesProvider => 
+
+            services.AddSingleton<IMongoClient>(servicesProvider =>
             {
                 var settings = Configuration.GetSection(nameof(MongoDbSettings)).Get<MongoDbSettings>();
                 return new MongoClient(settings.ConnectionString);
             });
-            
+
             services.AddSingleton<IItemsRepository, MogoDbRepository>();
             // services.AddSingleton<IItemsRepository, InMemItemsRepository>();
-            services.AddControllers();
+            services.AddControllers(options =>
+                {
+                    options.SuppressAsyncSuffixInActionNames = false;
+                });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalog", Version = "v1" });
